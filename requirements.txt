@@ -1,0 +1,13 @@
+streamlit
+requests
+pandas
+numpy
+bcrypt
+google-genai
+Pillow
+reportlab
+opencv-python-headless
+easyocr
+streamlit-option-menu
+streamlit-extras
+pyngrok
