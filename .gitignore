@@ -1,0 +1,37 @@
+# Environment variables and secrets
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local application data
+data/users.json
+data/medications.json
+data/interaction_history.json
+data/allergies.json
+data/reminders.json
+data/pdf_reports.json
+
+# Generated application files
+reports/*
+uploads/*
+*.pdf
+
+# Local tunnel/configuration files
+.ngrok/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
