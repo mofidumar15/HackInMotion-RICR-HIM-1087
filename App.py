@@ -485,4 +485,192 @@ if page == "Dashboard":
         st.info(
             "No medicines added yet."
   )
+elif page == "Medicine Search":
 
+    st.subheader(
+        "Medicine Search"
+    )
+
+    medicine_name = st.text_input(
+        "Enter Medicine Name"
+    )
+
+    if st.button(
+        "Search Medicine",
+        use_container_width=True
+    ):
+
+        if not medicine_name.strip():
+
+            st.warning(
+                "Please enter a medicine name."
+            )
+
+        else:
+
+            with st.spinner(
+                "Searching RxNorm..."
+            ):
+
+                result = search_medicine(
+                    medicine_name
+                )
+
+            if result["success"]:
+
+                medicine = result["medicine"]
+
+                st.success(
+                    "Medicine Found"
+                )
+
+                c1, c2 = st.columns(2)
+
+                with c1:
+
+                    st.metric(
+                        "Medicine",
+                        medicine["name"]
+                    )
+
+                with c2:
+
+                    st.metric(
+                        "RxCUI",
+                        medicine["rxcui"]
+                    )
+
+                st.json(
+                    medicine
+                )
+
+            else:
+
+                st.error(
+                    result["message"]
+                )
+
+
+elif page == "Drug Interaction Check":
+
+    st.subheader(
+        "Drug Interaction Analysis"
+    )
+
+    medicine_text = st.text_area(
+        "Enter medicines (one per line)",
+        height=200,
+        placeholder="""
+warfarin
+aspirin
+ibuprofen
+"""
+    )
+
+    if st.button(
+        "Analyze Interactions",
+        use_container_width=True
+    ):
+
+        medicines = [
+            item.strip()
+            for item in medicine_text.split("\n")
+            if item.strip()
+        ]
+
+        if len(medicines) < 2:
+
+            st.warning(
+                "Please enter at least two medicines."
+            )
+
+        else:
+
+            with st.spinner(
+                "Analyzing medicine interactions..."
+            ):
+
+                result = analyze_interactions(
+                    medicines
+                )
+
+            if result["success"]:
+
+                interaction_data = result.get(
+                    "interactions",
+                    []
+                )
+
+                risk_level = result.get(
+                    "risk_level",
+                    "LOW"
+                )
+
+                if risk_level == "HIGH":
+
+                    st.error(
+                        f"Risk Level: {risk_level}"
+                    )
+
+                elif risk_level == "MODERATE":
+
+                    st.warning(
+                        f"Risk Level: {risk_level}"
+                    )
+
+                else:
+
+                    st.success(
+                        f"Risk Level: {risk_level}"
+                    )
+
+                st.markdown("### Medicines")
+
+                for med in result.get(
+                    "resolved_medicines",
+                    []
+                ):
+
+                    st.write(
+                        f"• {med['name']} (RxCUI: {med['rxcui']})"
+                    )
+
+                st.markdown(
+                    "### Interaction Details"
+                )
+
+                if interaction_data:
+
+                    for item in interaction_data:
+
+                        st.info(
+                            item.get(
+                                "description",
+                                "Interaction information available."
+                            )
+                        )
+
+                else:
+
+                    st.success(
+                        "No interactions detected."
+                    )
+
+                save_interaction(
+                    user["id"],
+                    {
+                        "medicines": medicines,
+                        "risk_level": risk_level,
+                        "interaction_count": len(
+                            interaction_data
+                        )
+                    }
+                )
+
+            else:
+
+                st.error(
+                    result["message"]
+                )
+
+s
