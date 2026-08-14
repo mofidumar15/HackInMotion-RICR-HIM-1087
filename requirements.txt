@@ -3,11 +3,11 @@ requests
 pandas
 numpy
 bcrypt
-google-genai
+google-generativeai
+pyngrok
 Pillow
 reportlab
 opencv-python-headless
 easyocr
 streamlit-option-menu
 streamlit-extras
-pyngrok
